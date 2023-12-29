@@ -1,10 +1,11 @@
 (define get-data
   (lambda (d)
-	(call-with-input-file d
+    (call-with-input-file d
       (lambda (p)
         (define f
           (lambda (x)
-            (if (eof-object? x) '()
+            (if (eof-object? x)
+              '()
               (cons x (f (get-line p))))))
         (f (get-line p))))))
 
