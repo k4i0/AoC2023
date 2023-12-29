@@ -64,7 +64,7 @@
           (else
             (if (>= a c)
               s
-			  (if (>= b c)
+              (if (>= b c)
                 (check (+ a 1) (+ a 1) c s)
                 (check a (+ b 1) c s)))))))
     (check 0 0 (string-length s) s)))
