@@ -29,12 +29,12 @@
 (define solution
   (lambda (l)
 	(apply + 
-			(map string->number 
-				 (map list->string 
-					  (map fst-lst 
-						   (map rm-alpha l)))))))
+      (map string->number
+		   (map list->string
+				(map fst-lst
+					 (map rm-alpha l)))))))
 
-;(solution (parse1 "text1.txt"))
+;(solution (parse1 "test1.txt"))
 
 (define substr-subst
   (lambda (s)
