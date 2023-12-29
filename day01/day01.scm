@@ -8,7 +8,7 @@
               (cons x (f (get-line p))))))
         (f (get-line p))))))
 
-(define parse
+(define parse1
   (lambda (f)
 	(map string->list (get-data f))))
 
@@ -26,73 +26,58 @@
 	  (car l)
 	  (last-pair l))))
 
-(define solution1
-  (lambda (f)
+(define solution
+  (lambda (l)
 	(apply + 
 			(map string->number 
 				 (map list->string 
 					  (map fst-lst 
-						   (map rm-alpha 
-								(parse f))))))))
+						   (map rm-alpha l)))))))
 
-(define check
-  (lambda (a b c ss)
-	(if (= a c) ss
-	  (cond
-	    ((= b c) (check (+ a 1) (+ a 1) c ss))
-	    ((string=? "one" (substring ss a b))
-	     (check 0 0 (- c 2)
-			    (string-append
-				  (substring ss 0 a) "1" (substring ss b c))))
-		((string=? "two" (substring ss a b))
-	     (check 0 0 (- c 2)
-			    (string-append
-				  (substring ss 0 a) "2" (substring ss b c))))
-		((string=? "three" (substring ss a b))
-	     (check 0 0 (- c 4)
-			    (string-append
-				  (substring ss 0 a) "3" (substring ss b c))))
-		((string=? "four" (substring ss a b))
-	     (check 0 0 (- c 3)
-			    (string-append
-				  (substring ss 0 a) "4" (substring ss b c))))
-		((string=? "five" (substring ss a b))
-	     (check 0 0 (- c 3)
-			    (string-append
-				  (substring ss 0 a) "5" (substring ss b c))))
-		((string=? "six" (substring ss a b))
-	     (check 0 0 (- c 2)
-			    (string-append
-				  (substring ss 0 a) "6" (substring ss b c))))
-		((string=? "seven" (substring ss a b))
-	     (check 0 0 (- c 4)
-			    (string-append
-				  (substring ss 0 a) "7" (substring ss b c))))
-		((string=? "eight" (substring ss a b))
-	     (check 0 0 (- c 4)
-			    (string-append
-				  (substring ss 0 a) "8" (substring ss b c))))
-		((string=? "nine" (substring ss a b))
-	     (check 0 0 (- c 3)
-			    (string-append
-				  (substring ss 0 a) "9" (substring ss b c))))
-		(else (check a (+ b 1) c ss))))))
+;(solution (parse1 "text1.txt"))
 
-;(check 0 0 (string-length s) s))
-
-(define string-subst
+(define substr-subst
   (lambda (s)
-	(substring (check 0 0 (+ (string-length s) 1) (string-append s "z"))
-			   0
-			   (- (string-length (check 0 0 (+ (string-length s) 1) (string-append s "z"))) 1))))
+    (define check
+      (lambda (a b c s)
+        (cond
+          ((string=? "one" (substring s a b))
+           (check 0 0 (- c 2)
+                  (string-append (substring s 0 a) "1" (substring s b c))))
+		  ((string=? "two" (substring s a b))
+           (check 0 0 (- c 2)
+                  (string-append (substring s 0 a) "2" (substring s b c))))
+		  ((string=? "three" (substring s a b))
+           (check 0 0 (- c 4)
+                  (string-append (substring s 0 a) "3" (substring s b c))))
+		  ((string=? "four" (substring s a b))
+		   (check 0 0 (- c 3)
+                  (string-append (substring s 0 a) "4" (substring s b c))))
+		  ((string=? "five" (substring s a b))
+		   (check 0 0 (- c 3)
+                  (string-append (substring s 0 a) "5" (substring s b c))))
+		  ((string=? "six" (substring s a b))
+           (check 0 0 (- c 2)
+                  (string-append (substring s 0 a) "6" (substring s b c))))
+		  ((string=? "seven" (substring s a b))
+           (check 0 0 (- c 4)
+                  (string-append (substring s 0 a) "7" (substring s b c))))
+		   ((string=? "eight" (substring s a b))
+			(check 0 0 (- c 4)
+                  (string-append (substring s 0 a) "8" (substring s b c))))
+		   ((string=? "nine" (substring s a b))
+           (check 0 0 (- c 3)
+                  (string-append (substring s 0 a) "9" (substring s b c))))
+          (else (if (>= a c) s
+                  (if (>= b c) (check (+ a 1) (+ a 1) c s)
+                    (check a (+ b 1) c s)))))))
+    (check 0 0 (string-length s) s)))
 
-(define solution2
+
+(define parse2
   (lambda (f)
-	(apply +
-		   (map string->number
-				(map list->string
-					 (map fst-lst
-						  (map rm-alpha
-							   (map string->list
-									(map string-subst (get-data f))))))))))
+	(map string->list
+		 (map substr-subst (get-data f)))))
+
+;(solution (parse2 "test2.txt"))
 
